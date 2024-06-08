@@ -1,0 +1,153 @@
+﻿<UserControl x:Class="CoffeShop.View.FoodsTable.FoodsTableUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  
+             mc:Ignorable="d"  
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto" 
+             TextElement.FontWeight="Regular"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="Stl_btn_common" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+           
+        </Style>
+    </UserControl.Resources>
+    <materialDesign:DialogHost IsOpen="{Binding IsOpenDialog}" DialogContent="{Binding DialogContent}" >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.08*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!--#region [Header] -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="5" HorizontalAlignment="Stretch" VerticalContentAlignment="Bottom"
+                          ItemsSource="{Binding AreaList}"
+                          VerticalAlignment="Stretch"  FontSize="16" Margin="0 0 25 5" 
+                          SelectedItem="{Binding AreaSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          DisplayMemberPath="Name"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                    <materialDesign:HintAssist.Hint>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Khu Vực" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <materialDesign:PackIcon Kind="Sort" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5 3 0 0"/>
+                        </StackPanel>
+                    </materialDesign:HintAssist.Hint> 
+                </ComboBox>
+                <TextBox Grid.Column="6" FontSize="16" Text="{Binding NameSearch,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+                         HorizontalAlignment="Stretch" VerticalContentAlignment="Center" Margin="5">
+                    <materialDesign:HintAssist.Hint>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Tìm Kiếm" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2 3 0 0"/>
+                        </StackPanel>
+                    </materialDesign:HintAssist.Hint>
+                </TextBox>
+            </Grid>
+            <!--#endregion-->
+            
+            <!--#region [Talbe List] -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+                <ItemsControl ItemsSource="{Binding TableList}" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:TransitioningContent >
+                                <materialDesign:TransitioningContent.OpeningEffects >
+                                    <materialDesign:TransitionEffect Kind="FadeIn"/>
+                                    <materialDesign:TransitionEffect Kind="ExpandIn"/>
+                                </materialDesign:TransitioningContent.OpeningEffects>
+                                <materialDesign:Card Margin="10" VerticalAlignment="Top" HorizontalAlignment="Left"
+                                                     Width="190" Height="210" UniformCornerRadius="8">
+                                    <materialDesign:Card.Style>
+                                        <Style TargetType="materialDesign:Card">
+                                            <Style.Triggers >
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth5"/>
+                                                    <Setter Property="BorderThickness" Value="1"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:Card.Style>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock FontSize="18" Foreground="#13548A" Margin="8" FontWeight="SemiBold" Text="{Binding Name}" 
+                                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                                        <WrapPanel Grid.Row="1" Orientation="Vertical"
+                                                   Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <materialDesign:PackIcon Kind="Food" Margin="5" Width="36" Height="36"  Foreground="Green"/>
+                                            <TextBlock Text="Có Người" Foreground="Green"/>
+                                        </WrapPanel>
+
+                                        <WrapPanel Grid.Row="1" Orientation="Vertical"
+                                                   Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <materialDesign:PackIcon Kind="Food" Margin="5" Width="36" Height="36"  Foreground="Gray"/>
+                                            <TextBlock Text="Bàn Trống" Foreground="Gray"/>
+                                        </WrapPanel>
+
+                                        <Border Grid.Row="2" BorderThickness="0 1 0 0" BorderBrush="WhiteSmoke">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Button Grid.Column="0" Margin="8" Name="btn_Edit" 
+                                                        Click="btn_Edit_Click" Style="{StaticResource Stl_btn_common}">
+                                                    <materialDesign:PackIcon Kind="Pencil"  />
+                                                </Button>
+
+                                                <Border Grid.Column="1" BorderThickness="1 0 0 0" BorderBrush="WhiteSmoke"/>
+
+                                                <Button IsEnabled="{Binding IsActive}" Grid.Column="1" Margin="8" Click="btn_switch_click"
+                                                        Name="btn_Swich_Table" Style="{StaticResource Stl_btn_common}">
+                                                    <materialDesign:PackIcon Kind="TableSync"/>
+                                                </Button>
+
+
+                                                <Border Grid.Column="2" BorderThickness="1 0 0 0" BorderBrush="WhiteSmoke"/>
+
+                                                <Button IsEnabled="{Binding IsActive}" Grid.Column="2" 
+                                                        Name="bnt_Payment" Margin="8" Style="{StaticResource Stl_btn_common}"
+                                                        Click="btn_Payment_click">
+                                                    <materialDesign:PackIcon Kind="Payment" />
+                                                </Button>
+                                            </Grid>
+                                        </Border>
+                                        
+                                    </Grid>
+                                </materialDesign:Card>
+                            </materialDesign:TransitioningContent>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <!--#endregion-->
+           
+        </Grid>
+    </materialDesign:DialogHost>
+</UserControl>
